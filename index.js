@@ -33,11 +33,8 @@ app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
 
-// app.listen(PORT, () => console.log('App starting on port', PORT))
 app.listen(PORT, function(){
     console.log('started on:', this.address().port);
 })
-// app.listen(PORT, function () {
-//     console.log('started on: ', this.address().port);
-// });
+
 
