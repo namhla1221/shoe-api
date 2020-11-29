@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoe catalogue</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+
+  <link rel="stylesheet" href="css/shoe_catalogue.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script type="text/x-template" class="ShoeTemplate">
+    {{#each shoeList}}
+      <div class='shoes-left'>
+        <table> 
+          <tr>
+              <th>Brand:</th>
+              <td>{{brand}}</td>
+            </tr>
+            <tr>
+              <th>Color:</th>
+              <td>{{color}}</td>
+            </tr>
+            <tr>
+              <th>Size:</th>
+              <td>{{shoesize}}</td>
+              </tr>
+            <tr>
+              <th>In_Stock:</th>
+              <td>{{quantity}}</td>
+            </tr>
+            <tr>
+              <th>Price:</th>
+              <td>R{{price}}</td>
+            </tr>
+        </table>
+        
+        <a id="{{id}}" href="#" class="btn-cart" onclick="searchByID(this)"><i class="fas fa-cart-plus"></i></a>  
+      </div>
+    {{/each}}
+          </script>
+</head>
+
+<body>
+    <a class="link-nav" href="/">Kings Sneaker Store</a>
+  <div class="container">
+    <div class="rows main">
+      <div class="shopping-items">
+        
+        <a class="carts" href="#" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-cart-plus"></i></a>
+      </div>
+    </div>
+
+    <div class="rows left">
+      <select class="custom-select brandname" id="inputGroupSelect01">
+        <option selected value="all">Choose...</option>
+        <option value="Nike">Nike</option>
+        <option value="Puma">Puma</option>
+        <option value="Le coq">Vans</option>
+      </select>
+      <select class="custom-select shoeSize" id="inputGroupSelect01">
+        <option selected value="all">Size...</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        
+      </select>
+      <button type="button" class="btn btn-lg btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
+      <button type="button" class="btn btn-lg btn-success search-btn" data-toggle="modal" data-target="#exampleModalLong"><i
+          class="far fa-plus-square"></i> Add new shoes</button>
+
+    </div>
+
+    <div class="rows main-screen">
+      <div class="my_card">
+      </div>
+    </div>
+
+    <!-- Modal cart -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        
+            <h5 class="modal-title" id="exampleModalLabel">Shopping Cart</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body shoppingBasket">
+            <script type="text/x-template" class="ShoeBasketTemplate">
+
+              {{#each BasketList}}
+            <tr>
+              <td>{{qty}}x  {{brand}} - {{color}} (size {{shoesize}}) @ R{{subtotal}}</td>
+            </tr>
+              <br> <hr>
+            {{/each}}
+          </script>
+
+          </div>
+
+          <div class="modal-footer">
+            <div class="total">
+              <script type="text/x-template" class="ShoeBasketTemplate">
+                {{total}}
+             </script>
+            </div>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success CartRemove"><i class="fas fa-trash-alt"></i> checkout</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal new shoes -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add new shoes</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-bodys add-new">
+            <form>
+              <div class="form-group">
+                <select class="form-control shoebrand">
+                  <option value="">Select brand..</option>
+                  <option value="Nike">Nike</option>
+                  <option value="Puma">Puma</option>
+                  <option value="Le coq">Vans</option>
+                  <option value="Adidas">Adidas</option>
+                </select>
+                <select class="form-control shoeColor">
+                  <option value="">Select color..</option>
+                  <option value="Pink">Pink</option>
+                  <option value="Black">Black</option>
+                  <option value="White">white</option>
+                  <option value="Navy">Navy</option>
+                </select>
+                <select class="form-control shoesize">
+                  <option value="">Select Size..</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+                <input type="input" class="form-control shoeQty" id="recipient-name" placeholder="enter shoe quantity">
+                <input type="input" class="form-control shoePrice" id="recipient-name" placeholder="Enter shoe price">
+              </div>
+
+              <div class="message">
+                <div class="alert alert-success" role="alert">
+                </div>
+              </div>
+
+              <div class="error">
+                <div class="alert alert-danger" role="alert">
+                </div>
+              </div>
+
+
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btnStock"><i class="fas fa-plus-circle"></i> Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <button type="button" class="btn btn-primary">
+    <i class="fas fa-cart-plus"></i> <span class="badge badge-light">4</span>
+  </button> -->
+
+
+
+  <script type="text/javascript" src="./js/shoe_catalogue_api.js"></script>
+  <script type="text/javascript" src="./js/shoe_catalougueDOM.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
