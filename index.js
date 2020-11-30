@@ -23,10 +23,14 @@ if (process.env.DATABASE_URL) {
     useSSL = true;
 }
 
-// const pool = new Pool({
-//     connectionString, 
-//     ssl: useSSL
-// });
+const connectionString = process.env.DATABASE_URL || 'postgresql://namhla_m:namhla1221@localhost:5432/shoe_api';
+
+const pool = new Pool({
+    connectionString,
+    // ssl: useSSL
+});
+
+
 
 app.use(bodyParser.urlencoded({ extended: false}));
 
@@ -37,4 +41,16 @@ app.listen(PORT, function(){
     console.log('started on:', this.address().port);
 })
 
+app.get("/");
 
+app.get("/api/shoes");
+
+app.get("/api/shoes/brand/:brandname");
+
+app.get("/api/shoes/size/:size");
+
+app.get("/api/shoes/brand/:brandname/size/:size");
+
+app.post("/api/shoes/sold/:id");
+
+app.post("/api/shoes");
