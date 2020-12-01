@@ -2,10 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const session = require('express-session');
-const Cart = require('./routes/cart');
-const Shopping_shoes = require('./routes/shopping_shoes');
-const CartService = require('./services/shopping_cart');
-const ShoppingService = require('./services/shoes');
+
 const app = express();
 
 let PORT = process.env.PORT || 3010;
